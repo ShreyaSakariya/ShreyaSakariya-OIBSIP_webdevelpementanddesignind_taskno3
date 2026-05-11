@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ThermoShift — A sleek temperature converter supporting Celsius, Fahrenheit, and Kelvin conversions with real-time visualization.">
+    <title>ThermoShift — Temperature Converter</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Background Effects -->
+    <div class="bg-effects" aria-hidden="true">
+        <div class="bg-orb orb-warm"></div>
+        <div class="bg-orb orb-cool"></div>
+        <div class="bg-grid"></div>
+    </div>
+
+    <!-- ========== MAIN APP ========== -->
+    <div class="app-wrapper">
+
+        <!-- Header -->
+        <header class="app-header" id="app-header">
+            <div class="logo">
+                <span class="logo-icon" id="logo-icon">🌡️</span>
+                <span class="logo-text">ThermoShift</span>
+            </div>
+            <p class="header-tagline">Instant temperature conversion — beautifully simple.</p>
+        </header>
+
+        <!-- Converter Card -->
+        <main class="converter-card" id="converter-card">
+
+            <!-- Top: Input Section -->
+            <div class="input-section">
+                <h1 class="card-title">Convert Temperature</h1>
+                <p class="card-subtitle">Enter a value and choose units to convert between Celsius, Fahrenheit, and Kelvin.</p>
+
+                <!-- Temperature Input -->
+                <div class="input-group" id="input-group">
+                    <label for="temp-input" class="input-label">Temperature</label>
+                    <div class="input-wrapper">
+                        <input
+                            type="text"
+                            id="temp-input"
+                            class="temp-input"
+                            placeholder="e.g. 100"
+                            autocomplete="off"
+                            inputmode="decimal"
+                            aria-label="Temperature value"
+                        >
+                        <span class="input-unit" id="input-unit-badge">°C</span>
+                    </div>
+                    <p class="input-error" id="input-error">Please enter a valid number</p>
+                </div>
+
+                <!-- Unit Selection — From -->
+                <div class="unit-section">
+                    <div class="unit-block">
+                        <label class="input-label">From</label>
+                        <div class="unit-tabs" id="from-tabs" role="radiogroup" aria-label="Convert from unit">
+                            <button class="unit-tab active" data-unit="C" id="from-c" role="radio" aria-checked="true">
+                                <span class="tab-symbol">°C</span>
+                                <span class="tab-name">Celsius</span>
+                            </button>
+                            <button class="unit-tab" data-unit="F" id="from-f" role="radio" aria-checked="false">
+                                <span class="tab-symbol">°F</span>
+                                <span class="tab-name">Fahrenheit</span>
+                            </button>
+                            <button class="unit-tab" data-unit="K" id="from-k" role="radio" aria-checked="false">
+                                <span class="tab-symbol">K</span>
+                                <span class="tab-name">Kelvin</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Swap Button -->
+                    <button class="swap-btn" id="swap-btn" aria-label="Swap units">
+                        <span class="swap-icon">⇄</span>
+                    </button>
+
+                    <div class="unit-block">
+                        <label class="input-label">To</label>
+                        <div class="unit-tabs" id="to-tabs" role="radiogroup" aria-label="Convert to unit">
+                            <button class="unit-tab" data-unit="C" id="to-c" role="radio" aria-checked="false">
+                                <span class="tab-symbol">°C</span>
+                                <span class="tab-name">Celsius</span>
+                            </button>
+                            <button class="unit-tab active" data-unit="F" id="to-f" role="radio" aria-checked="true">
+                                <span class="tab-symbol">°F</span>
+                                <span class="tab-name">Fahrenheit</span>
+                            </button>
+                            <button class="unit-tab" data-unit="K" id="to-k" role="radio" aria-checked="false">
+                                <span class="tab-symbol">K</span>
+                                <span class="tab-name">Kelvin</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Convert Button -->
+                <button class="convert-btn" id="convert-btn">
+                    <span class="convert-btn-text">Convert</span>
+                    <span class="convert-btn-icon">→</span>
+                </button>
+            </div>
+
+            <!-- Divider -->
+            <div class="card-divider">
+                <span class="divider-label">Result</span>
+            </div>
+
+            <!-- Bottom: Result Section -->
+            <div class="result-section" id="result-section">
+                <div class="result-placeholder" id="result-placeholder">
+                    <span class="placeholder-icon">🔄</span>
+                    <p class="placeholder-text">Enter a temperature above and hit Convert</p>
+                </div>
+
+                <div class="result-display hidden" id="result-display">
+                    <div class="result-from" id="result-from">
+                        <span class="result-value" id="result-from-value">100</span>
+                        <span class="result-unit" id="result-from-unit">°C</span>
+                    </div>
+                    <div class="result-equals">=</div>
+                    <div class="result-to" id="result-to">
+                        <span class="result-value result-value-main" id="result-to-value">212</span>
+                        <span class="result-unit" id="result-to-unit">°F</span>
+                    </div>
+                </div>
+
+                <!-- Formula -->
+                <div class="formula-box hidden" id="formula-box">
+                    <span class="formula-label">Formula</span>
+                    <code class="formula-code" id="formula-code">°F = (°C × 9/5) + 32</code>
+                </div>
+
+                <!-- Thermometer Visualization -->
+                <div class="thermo-visual hidden" id="thermo-visual">
+                    <div class="thermo-bar-track">
+                        <div class="thermo-bar-fill" id="thermo-fill"></div>
+                    </div>
+                    <div class="thermo-labels">
+                        <span class="thermo-label-cold">🥶 Cold</span>
+                        <span class="thermo-label-mild">😊 Mild</span>
+                        <span class="thermo-label-hot">🔥 Hot</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Quick Conversions -->
+        <section class="quick-section" id="quick-section">
+            <h2 class="quick-title">Quick Reference</h2>
+            <div class="quick-grid">
+                <div class="quick-card" id="quick-freeze">
+                    <div class="quick-icon">❄️</div>
+                    <div class="quick-info">
+                        <span class="quick-name">Water Freezes</span>
+                        <div class="quick-temps">
+                            <span>0°C</span>
+                            <span>32°F</span>
+                            <span>273.15K</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="quick-card" id="quick-body">
+                    <div class="quick-icon">🫀</div>
+                    <div class="quick-info">
+                        <span class="quick-name">Body Temp</span>
+                        <div class="quick-temps">
+                            <span>37°C</span>
+                            <span>98.6°F</span>
+                            <span>310.15K</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="quick-card" id="quick-boil">
+                    <div class="quick-icon">♨️</div>
+                    <div class="quick-info">
+                        <span class="quick-name">Water Boils</span>
+                        <div class="quick-temps">
+                            <span>100°C</span>
+                            <span>212°F</span>
+                            <span>373.15K</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="quick-card" id="quick-absolute">
+                    <div class="quick-icon">🧊</div>
+                    <div class="quick-info">
+                        <span class="quick-name">Absolute Zero</span>
+                        <div class="quick-temps">
+                            <span>−273.15°C</span>
+                            <span>−459.67°F</span>
+                            <span>0K</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- History Section -->
+        <section class="history-section" id="history-section">
+            <div class="history-header">
+                <h2 class="history-title">Conversion History</h2>
+                <button class="history-clear" id="history-clear">Clear All</button>
+            </div>
+            <div class="history-list" id="history-list">
+                <p class="history-empty" id="history-empty">No conversions yet. Try one above!</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="app-footer" id="app-footer">
+            <p>© 2026 ThermoShift · Built with HTML, CSS & JavaScript · Level 1 Internship Task 3</p>
+        </footer>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
